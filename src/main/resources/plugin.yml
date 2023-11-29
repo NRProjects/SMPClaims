@@ -1,0 +1,4 @@
+name: SMPClaims
+version: '${version}'
+main: plugins.nate.smpclaims.SMPClaims
+api-version: '1.20'
