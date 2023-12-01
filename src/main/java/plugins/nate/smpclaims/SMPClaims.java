@@ -53,16 +53,22 @@ public final class SMPClaims extends JavaPlugin {
 
             connection = DriverManager.getConnection(url);
             try (Statement statement = connection.createStatement()) {
-                String sql = "CREATE TABLE IF NOT EXISTS claims (" +
-                        "Claimant TEXT PRIMARY KEY," +
-                        "Size INTEGER," +
-                        "MinX INTEGER," +
-                        "MaxX INTEGER," +
-                        "MaxY INTEGER," +
-                        "MinY INTEGER," +
-                        "MaxZ INTEGER," +
-                        "MinZ INTEGER);";
-                statement.execute(sql);
+                String claimsTable = "CREATE TABLE IF NOT EXISTS claims (" +
+                        "ClaimID INTEGER PRIMARY KEY," +
+                        "PlayerUUID TEXT," +
+                        "World TEXT);";
+
+
+                String claimedChunksTable = "CREATE TABLE IF NOT EXISTS claimed_chunks (" +
+                        "ClaimID INTEGER," +
+                        "ChunkZ INTEGER," +
+                        "ChunkX INTEGER," +
+                        "World TEXT," +
+                        "PRIMARY KEY (ChunkX, ChunkZ, ClaimID, World)," +
+                        "FOREIGN KEY (ClaimID) REFERENCES claims(ClaimID));";
+
+                statement.execute(claimsTable);
+                statement.execute(claimedChunksTable);
             }
         } catch (SQLException e) {
             getPlugin().getLogger().severe("Error initializing the database: " + e.getMessage());
