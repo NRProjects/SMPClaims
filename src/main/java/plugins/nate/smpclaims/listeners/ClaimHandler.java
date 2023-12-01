@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import plugins.nate.smpclaims.managers.ClaimsManager;
 
 import static plugins.nate.smpclaims.managers.ClaimsManager.isClaimTool;
 import static plugins.nate.smpclaims.utils.ChatUtils.PREFIX;
@@ -26,14 +27,12 @@ public class ClaimHandler implements Listener {
             return;
         }
 
-        if (!action.isRightClick()) {
-            return;
-        }
-
         Chunk chunk = location.getChunk();
-        int chunkX = chunk.getX();
-        int chunkZ = chunk.getZ();
 
-        sendMessage(player, PREFIX + "&aSelected chunk! (X: " + chunkX + " Z: " + chunkZ + ")");
+        if (action.isLeftClick()) {
+            ClaimsManager.selectChunk(player, chunk);
+        } else if (action.isRightClick()) {
+            ClaimsManager.deselectChunk(player, chunk);
+        }
     }
 }
